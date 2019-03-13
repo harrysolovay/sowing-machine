@@ -1,0 +1,25 @@
+{
+  "extends": ["airbnb-base", "prettier"],
+  "globals": {
+    "require": "writable"
+  },
+  "parserOptions": {
+    "ecmaVersion": 9,
+    "impliedStrict": true,
+    "sourceType": "module"
+  },
+  "plugins": ["prettier"],
+  "rules": {
+    "block-scoped-var": "off",
+    "comma-dangle": ["error", "only-multiline"],
+    "import/order": "off",
+    "import/prefer-default-export": "off",
+    "no-console": "off",
+    "no-nested-ternary": "off",
+    "no-param-reassign": "off",
+    "no-restricted-syntax": "off",
+    "no-unused-expressions": "off",
+    "no-var": "off",
+    "object-shorthand": "off"
+  }
+}

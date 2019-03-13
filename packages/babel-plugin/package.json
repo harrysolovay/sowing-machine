@@ -1,0 +1,36 @@
+{
+  "name": "babel-plugin-sowing-machine",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/harrysolovay/sowing-machine.git",
+    "directory": "packages/babel-plugin"
+  },
+  "bugs": "https://github.com/harrysolovay/sowing-machine/issues",
+  "dependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/helper-plugin-utils": "^7.0.0",
+    "@babel/template": "^7.2.2",
+    "esm": "^3.2.14",
+    "is-html-tag-name": "^1.0.0",
+    "is-react-hook": "^1.0.0"
+  },
+  "devDependencies": {
+    "ava": "^1.3.1"
+  },
+  "ava": {
+    "require": [
+      "esm"
+    ]
+  },
+  "scripts": {
+    "clean": "rm -rf __tests__/fixtures/*/actual.js",
+    "test": "ava"
+  }
+}

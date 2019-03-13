@@ -1,0 +1,4 @@
+node_modules/**/*.js
+packages/**/fixtures/**/*.js
+**/lib/*.js
+**/build/*.js
