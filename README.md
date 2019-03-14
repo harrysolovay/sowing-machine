@@ -32,7 +32,7 @@ const Counter = sow(() => {
   const increment = () => setCount(count + 1)
 
   // express your UI and its embedded logic
-  return div({className: wrapper})(
+  return div({className: 'wrapper'})(
     h1('current count: ', count),
     div({className: 'controls'})(
       button({onClick: decrement})`decrement`,
