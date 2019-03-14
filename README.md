@@ -1,10 +1,6 @@
-# Sowing Machine
+<h1 align='center'>Sowing Machine</h1>
 
-> 🧵A silky-smooth React UI toolchain & JSX alternative
-
-<hr />
-
-<p>
+<p align='center'>
 
 <!-- LICENSE -->
 <a href='https://github.com/rescripts/rescripts/blob/master/LICENSE'>
