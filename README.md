@@ -72,7 +72,7 @@ yarn add sowing-machine babel-plugin-sowing-machine eslint-config-sowing-machine
 
 And voila! You're good to go!
 
-## Intro
+## Background
 
 How do we feel about the coupling of UI logic & markup in React? Well, JSX does the trick... but it was born out of familiarity as a guiding principal (to ease the transition from HTML). This has been helpful to many user; after all, describing UI based off state is a new pattern, and JSX lowered the barrier to entry. But JSX also created some problems: beyond its redundancy, JSX suggests HTML-like behavior under the hood. Prop-passing resembles HTML attributes, instead of what it really is (passing an object to a function). Along with the misleading DX comes an extra parser stage for transpilation (in addition to the transform).
 
