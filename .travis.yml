@@ -9,6 +9,6 @@ notifications:
 node_js:
   - '10'
 before script:
-  - yarn bootstrap && yarn build
+  - yarn bootstrap
 script:
-  - yarn test
+  - yarn build && yarn test
