@@ -8,9 +8,7 @@ notifications:
   email: false
 node_js:
   - '10'
-before_install:
-  - yarn bootstrap
 before script:
-  - yarn build
+  - yarn bootstrap && yarn build
 script:
   - yarn test
