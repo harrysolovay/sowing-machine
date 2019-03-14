@@ -52,10 +52,10 @@ yarn add sowing-machine babel-plugin-sowing-machine eslint-config-sowing-machine
 
 ```diff
 {
-	"presets": ["react-app"],
-	"plugins": [
-+		"sowing-machine"
-	]
+  "presets": ["react-app"],
+    "plugins": [
++   "sowing-machine"
+  ]
 }
 ```
 
@@ -63,10 +63,10 @@ yarn add sowing-machine babel-plugin-sowing-machine eslint-config-sowing-machine
 
 ```diff
 {
-	"extends": [
-		"react-app",
-+		"sowing-machine"
-	]
+  "extends": [
+    "react-app",
++   "sowing-machine"
+  ]
 }
 ```
 
