@@ -30,19 +30,19 @@ import {useState} from 'react'
 
 // wrap the component with 'sow'
 const Counter = sow(() => {
-	const [count, setCount] = useState(0)
-	
-	const decrement = () => setCount(count - 1)
-	const increment = () => setCount(count + 1)
-	
-	// express your UI and its embedded logic
-	return div({className: wrapper})(
-		h1('current count: ', count),
-		div({className: 'controls'})(
-			button({onClick: decrement})`decrement`,
-			button({onClick: increment})`increment`,
-		)
-	)
+  const [count, setCount] = useState(0)
+
+  const decrement = () => setCount(count - 1)
+  const increment = () => setCount(count + 1)
+
+  // express your UI and its embedded logic
+  return div({className: wrapper})(
+    h1('current count: ', count),
+    div({className: 'controls'})(
+      button({onClick: decrement})`decrement`,
+      button({onClick: increment})`increment`,
+    ),
+  )
 })
 ```
 
@@ -84,44 +84,52 @@ But what it really comes down to is this: **if you could have your pick of conve
 
 ```js
 // defining a function
-function add ({a, b}) {
-    return a + b
+function add({a, b}) {
+  return a + b
 }
 
 // calling the function
-<add a={1} b={2}></add>
+;<add a={1} b={2} />
 ```
 
-
 Probably not. Yet, this is what we do for every single piece of our UI in React.
-
 
 We could get around using JSX by using `React.createElement` directly. [The bootstrapped create-react-app App component](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/src/App.js)––for example––would look like this:
 
 ```js
 import {createElement as e} from 'react'
 
-const App = e('div', {className: 'App'},
-    e('header', {className: 'App-header'},
-        e('img', {src: logo, className: 'App-logo', alt: 'logo'}),
-        e('p', null,
-            'Edit ',
-            e('code', null, 'src/App.js'),
-            ' and save to reload.'
-        ),
-        e('a', {
-            className: 'App-link',
-            href: 'https://reactjs.org',
-            target: '_blank',
-            rel: 'noopener noreferrer',
-        }, 'Learn React'),
-    )
+const App = e(
+  'div',
+  {className: 'App'},
+  e(
+    'header',
+    {className: 'App-header'},
+    e('img', {src: logo, className: 'App-logo', alt: 'logo'}),
+    e(
+      'p',
+      null,
+      'Edit ',
+      e('code', null, 'src/App.js'),
+      ' and save to reload.',
+    ),
+    e(
+      'a',
+      {
+        className: 'App-link',
+        href: 'https://reactjs.org',
+        target: '_blank',
+        rel: 'noopener noreferrer',
+      },
+      'Learn React',
+    ),
+  ),
 )
 ```
 
 Although this lets us avoid JSX, it isn't very readable. `React.createElement` (`e`) is called 6 times. Depending on your formatter (prettier, for example), this could wrap in really unattractive ways. The current highlighting makes it difficult to distinguish grammar. JSX is––without a doubt––easier to work with.
 
-But not as easy as Sowing Machine––a balance between preexisting options. It improves upon  the function-call DX and lets you write less code to express the same UI. It's simple-enough to learn and master in minutes.
+But not as easy as Sowing Machine––a balance between preexisting options. It improves upon the function-call DX and lets you write less code to express the same UI. It's simple-enough to learn and master in minutes.
 
 Here's the create-react-app example using Sowing Machine:
 
@@ -143,6 +151,5 @@ const App = sow(() =>(
   ),
 ))
 ```
-
 
 This is a smaller, more readable block of code, which lets you recognize grammar with greater speed than that of JSX.
