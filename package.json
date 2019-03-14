@@ -37,6 +37,7 @@
     "test": "lerna run test",
     "precommit": "yarn lint && yarn test",
     "commit": "git add . && git-cz",
+    "prepublish": "yarn build",
     "release": "lerna publish --conventional-comits",
     "beta": "yarn release -- --canary --preid beta"
   }

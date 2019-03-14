@@ -12,8 +12,8 @@
   <img src='https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square' />
 </a>
 
-<a href='https://travis-ci.org/harrysolovay/babel-microtest'>
-	<img src='https://travis-ci.org/harrysolovay/babel-microtest.svg?branch=master' />
+<a href='https://travis-ci.org/harrysolovay/sowing-machine'>
+	<img src='https://travis-ci.org/harrysolovay/sowing-machine.svg?branch=master' />
 </a>
 
 </p>
