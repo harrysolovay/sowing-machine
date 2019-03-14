@@ -1,7 +1,8 @@
 {
   "extends": ["airbnb-base", "prettier"],
   "globals": {
-    "require": "writable"
+    "require": "writable",
+    "window": "readonly"
   },
   "parserOptions": {
     "ecmaVersion": 9,

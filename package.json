@@ -31,6 +31,8 @@
   "scripts": {
     "bootstrap": "lerna bootstrap && lerna link",
     "clean": "rm -rf node_modules && lerna clean --yes && lerna run clean",
+    "build": "lerna run build",
+    "watch": "lerna run watch",
     "lint": "eslint --fix 'packages/**/*.js'",
     "test": "lerna run test",
     "precommit": "yarn lint && yarn test",

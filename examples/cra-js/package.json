@@ -1,10 +1,7 @@
 {
   "name": "sowing-machine-example-cra-js",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "private": true,
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "browserslist": [
     ">0.2%",
     "not dead",
@@ -12,6 +9,7 @@
     "not op_mini all"
   ],
   "dependencies": {
+    "eslint-config-sowing-machine": "^0.0.1",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "react-scripts": "2.1.8"
@@ -19,24 +17,21 @@
   "devDependencies": {
     "@rescripts/cli": "^0.0.10",
     "@rescripts/rescript-use-babel-config": "^0.0.8",
+    "@rescripts/rescript-use-eslint-config": "^0.0.9",
     "babel-plugin-sowing-machine": "^0.0.1",
     "sowing-machine": "^0.0.1"
   },
   "rescripts": [
     [
       "use-babel-config",
-      {
-        "presets": [
-          "react-app"
-        ],
-        "plugins": [
-          "sowing-machine"
-        ]
-      }
+      ".babelrc"
+    ],
+    [
+      "use-eslint-config",
+      ".eslintrc"
     ]
   ],
   "scripts": {
-    "start": "rescripts start",
-    "build": "rescripts build"
+    "start": "rescripts start"
   }
 }

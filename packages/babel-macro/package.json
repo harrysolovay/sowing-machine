@@ -1,5 +1,5 @@
 {
-  "name": "babel-plugin-sowing-machine",
+  "name": "sowing-machine.macro",
   "version": "0.0.1",
   "main": "build/index.js",
   "files": [
@@ -14,16 +14,14 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/harrysolovay/sowing-machine.git",
-    "directory": "packages/babel-plugin"
+    "directory": "packages/babel-macro"
   },
   "bugs": "https://github.com/harrysolovay/sowing-machine/issues",
   "dependencies": {
-    "@babel/core": "^7.3.4",
-    "@babel/helper-plugin-utils": "^7.0.0",
-    "@babel/template": "^7.2.2",
-    "esm": "^3.2.14",
-    "is-html-tag-name": "^1.0.0",
-    "is-react-hook": "^1.0.0"
+    "babel-plugin-macros": "^2.5.0",
+    "babel-plugin-sowing-machine": "^0.0.1",
+    "esm": "^3.2.17",
+    "sowing-machine": "^0.0.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
@@ -40,6 +38,6 @@
     "clean": "rm -rf build",
     "build": "babel src --out-dir build",
     "watch": "yarn build -w",
-    "test": "FORMAT=plugin ava ../babel-tests/__tests__/index.js"
+    "test": "FORMAT=macro ava ../babel-tests/__tests__/index.js"
   }
 }

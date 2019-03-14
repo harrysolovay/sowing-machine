@@ -3,7 +3,13 @@
   "version": "0.0.1",
   "main": "build/index.js",
   "module": "lib/index.js",
-  "types": "index.d.ts",
+  "types": "types.d.ts",
+  "files": [
+    "build",
+    "lib",
+    "types.d.ts",
+    "README.md"
+  ],
   "license": "MIT",
   "private": false,
   "publishConfig": {

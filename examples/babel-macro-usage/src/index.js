@@ -1,6 +1,8 @@
+/* eslint-disable */
+
 import './styles.css'
 
-import sow from 'sowing-machine'
+import sow from 'sowing-machine.macro'
 import {useState} from 'react'
 import logo from './logo.svg'
 import {render} from 'react-dom'

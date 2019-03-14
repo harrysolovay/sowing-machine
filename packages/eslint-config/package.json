@@ -1,0 +1,23 @@
+{
+  "name": "eslint-config-sowing-machine",
+  "version": "0.0.1",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "README.md"
+  ],
+  "license": "MIT",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/harrysolovay/sowing-machine.git",
+    "directory": "packages/eslint-config"
+  },
+  "bugs": "https://github.com/harrysolovay/sowing-machine/issues",
+  "dependencies": {
+    "eslint-plugin-sowing-machine": "^0.0.1"
+  }
+}

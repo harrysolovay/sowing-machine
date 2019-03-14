@@ -1,8 +1,9 @@
 {
-  "name": "babel-plugin-sowing-machine",
+  "name": "eslint-plugin-sowing-machine",
   "version": "0.0.1",
-  "main": "build/index.js",
+  "main": "index.js",
   "files": [
+    "index.js",
     "build",
     "README.md"
   ],
@@ -14,22 +15,22 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/harrysolovay/sowing-machine.git",
-    "directory": "packages/babel-plugin"
+    "directory": "packages/eslint-plugin"
   },
   "bugs": "https://github.com/harrysolovay/sowing-machine/issues",
   "dependencies": {
-    "@babel/core": "^7.3.4",
-    "@babel/helper-plugin-utils": "^7.0.0",
-    "@babel/template": "^7.2.2",
-    "esm": "^3.2.14",
-    "is-html-tag-name": "^1.0.0",
-    "is-react-hook": "^1.0.0"
+    "@babel/traverse": "^7.3.4",
+    "esm": "^3.2.16",
+    "is-html-tag-name": "^1.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.3.4",
     "@babel/preset-env": "^7.3.4",
-    "ava": "^1.3.1"
+    "ava": "^1.3.1",
+    "escodegen": "^1.11.1",
+    "eslint": "^5.15.1",
+    "eslint-ava-rule-tester": "^3.0.0"
   },
   "ava": {
     "require": [
@@ -40,6 +41,6 @@
     "clean": "rm -rf build",
     "build": "babel src --out-dir build",
     "watch": "yarn build -w",
-    "test": "FORMAT=plugin ava ../babel-tests/__tests__/index.js"
+    "test": "ava"
   }
 }
