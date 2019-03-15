@@ -23,12 +23,12 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Minimal example](#minimal-example)
 - [Packages](#packages)
 - [Background](#background)
 - [Installation & setup](#installation--setup)
 - [Describing UI](#describing-ui)
+- [createElement vs. cloneElement](#createelement-vs-cloneelement)
 - [Life Cycle](#life-cycle)
 - [Roadmap](#roadmap)
 
@@ -56,14 +56,17 @@ const Counter = sow(() => {
     ),
   )
 })
+
+// use the component
+const counterInstance = sow(Counter())
 ```
 
 ## Packages
 
 - [babel-plugin-sowing-machine](https://github.com/harrysolovay/sowing-machine/tree/master/packages/babel-plugin): compiles sowing machine code into a valid format that can be understood at runtime
 - [sowing-machine](https://github.com/harrysolovay/sowing-machine/tree/master/packages/runtime): the runtime library which interprets compiled `sow` calls
-- [eslint-config-sowing-machine](https://github.com/harrysolovay/sowing-machine/tree/master/packages/eslint-config): a wrapper around the ESLint plugin which disables `no-undef` and replaces it with an equivalent plugin that marks html tag identifiers as defined within sow calls
-- [sowing-machine.macro](https://github.com/harrysolovay/sowing-machine/tree/master/packages/babel-macro): a version which makes use of the [babel-plugin-macros](https://github.com/kentcdodds/babel-plugin-macros) API to provide a more seamless integration into tools like [create-react-app](https://github.com/facebook/create-react-app), [NextJS](https://nextjs.org/) and [GatsbyJS](https://www.gatsbyjs.org/).
+- [eslint-config-sowing-machine](https://github.com/harrysolovay/sowing-machine/tree/master/packages/eslint-config): disables `no-undef` and enables a the `sowing-machine/no-undef` rule, which marks html tag identifiers as defined within sow calls
+- [sowing-machine.macro](https://github.com/harrysolovay/sowing-machine/tree/master/packages/babel-macro): makes use of the [babel-plugin-macros](https://github.com/kentcdodds/babel-plugin-macros) API to provide a more seamless integration with tools such as [create-react-app](https://github.com/facebook/create-react-app), [NextJS](https://nextjs.org/) and [GatsbyJS](https://www.gatsbyjs.org/).
 
 ## Background
 
@@ -125,7 +128,7 @@ Here's the create-react-app example using Sowing Machine:
 ```js
 import sow from 'sowing-machine'
 
-const App = sow(() =>(
+const App = sow(() =>
   div({class: 'App'})(
     header({class: 'App-header'})(
       img({src: logo, class: 'App-logo', alt: 'logo'}),
@@ -138,14 +141,14 @@ const App = sow(() =>(
       })`Learn React`,
     ),
   ),
-))
+)
 ```
 
 This is a smaller, more readable block of code, which lets you recognize grammar with greater speed than that of JSX.
 
 ## Installation & setup
 
-#### Install `babel-plugin-sowing-machine and eslint-config-sowing-machine` as dev dependencies:
+#### Install the following dev dependencies:
 
 ```sh
 yarn add -D babel-plugin-sowing-machine eslint-config-sowing-machine
@@ -165,8 +168,7 @@ yarn add sowing-machine
 
 ```diff
 {
-  "presets": ["react-app"],
-    "plugins": [
+  "plugins": [
 +   "sowing-machine"
   ]
 }
@@ -179,7 +181,6 @@ yarn add sowing-machine
 ```diff
 {
   "extends": [
-    "react-app",
 +   "sowing-machine"
   ]
 }
@@ -194,10 +195,12 @@ Wrapping calls with `sow` ensures that they're translated into valid runtime cod
 ```diff
 import sow from 'sowing-machine'
 
-// component
-const HelloWorld = sow(props =>
-  span(props)`Hello World!`
-)
+- const HelloWorld = props =>
+-   span(props)`Hello World!`
+
++ const HelloWorld = sow(props =>
++   span(props)`Hello World!`
++ )
 
 - const instance = HelloWorld()
 + const instance = sow(HelloWorld())
@@ -216,27 +219,27 @@ const SDatePicker = sow(DatePicker)
 const datePickerInstance = sow(SDatePicker())
 ```
 
-### Elements
+### Ways to write an element
 
-#### Props
+#### With props
 
 ```js
 div({some: 'prop'})
 ```
 
-#### Children
+#### With children
 
 ```js
 div(div({className: 'first-child'}), div({className: 'second-child'}))
 ```
 
-#### Text Child
+#### With text
 
 ```js
 h1`This is cool!`
 ```
 
-#### Props and Children
+#### With props and children
 
 ```js
 form({className: 'form'})(
@@ -245,10 +248,34 @@ form({className: 'form'})(
 )
 ```
 
-#### Props & Text Child
+#### With props & text
 
 ```js
 span({className: 'warning')`beware of dog`
+```
+
+## createElement vs. cloneElement
+
+Let's say you have a component instance that you'd like to use as the basis for a new component. There's no way of expressing this with JSX. You'd need to do the following:
+
+```jsx
+import React from 'react'
+
+const instance = <div>Hello</div>
+
+const usingTheInstance = (
+  <div>{React.cloneElement(instance, {}, 'Hello JSX')}</div>
+)
+```
+
+With Sowing Machine, the difference between using components and component instances is trivial:
+
+```js
+import sow from 'sowing-machine'
+
+const instance = sow(div`Hello`)
+
+const usingTheInstance = sow(instance`Hello Sowing Machine`)
 ```
 
 ## Life Cycle
@@ -282,7 +309,7 @@ const List = ({list}) => (
 )
 ```
 
-**With Sowing Machine, you don't need to do this explicitly**.
+**With Sowing Machine, this is much cleaner:**.
 
 ```js
 import sow from 'sowing-machine'
@@ -311,7 +338,9 @@ _c(
 
 ### Runtime
 
-When executing the code above, the runtime library will analyze the arguments of each `_s`; is it a React component? If so does it have props, children, or both? Is it a tag function? Do the quasis need to be recombined or passed into the function according to [the TaggedTemplateLiteral specification](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals).
+When executing the code above, the runtime library will analyze the arguments of each `_s`.
+
+The runtime goes through some of the following questions: is it a React component? If so does it have props, children, or both? Is it a tag function? Do the quasis need to be recombined or passed into the function according to [the TaggedTemplateLiteral specification](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals).
 
 ## Roadmap
 
