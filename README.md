@@ -146,7 +146,7 @@ const App = sow(() =>
 
 This is a smaller, more readable block of code, which lets you recognize grammar with greater speed than that of JSX.
 
-## Installation & setup
+## Installation & Setup
 
 #### Install the following dev dependencies:
 
