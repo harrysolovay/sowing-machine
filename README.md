@@ -23,10 +23,11 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+
 - [Minimal example](#minimal-example)
 - [Packages](#packages)
 - [Background](#background)
-- [Installation & setup](#installation--setup)
+- [Installation & Setup](#installation--setup)
 - [Describing UI](#describing-ui)
 - [createElement vs. cloneElement](#createelement-vs-cloneelement)
 - [Life Cycle](#life-cycle)
