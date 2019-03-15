@@ -3,7 +3,7 @@
 <p align='center'>
 
 <!-- LICENSE -->
-<a href='https://github.com/rescripts/rescripts/blob/master/LICENSE'>
+<a href='https://opensource.org/licenses/MIT'>
   <img src='https://img.shields.io/packagist/l/doctrine/orm.svg' />
 </a>
 
@@ -17,6 +17,22 @@
 </a>
 
 </p>
+
+## Guide
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Minimal example](#minimal-example)
+- [Packages](#packages)
+- [Background](#background)
+- [Installation & setup](#installation--setup)
+- [Describing UI](#describing-ui)
+- [Life Cycle](#life-cycle)
+- [Roadmap](#roadmap)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Minimal example
 
@@ -42,35 +58,12 @@ const Counter = sow(() => {
 })
 ```
 
-## Quickstart
+## Packages
 
-```sh
-yarn add sowing-machine babel-plugin-sowing-machine eslint-config-sowing-machine
-```
-
-`.babelrc`
-
-```diff
-{
-  "presets": ["react-app"],
-    "plugins": [
-+   "sowing-machine"
-  ]
-}
-```
-
-`.eslintrc`
-
-```diff
-{
-  "extends": [
-    "react-app",
-+   "sowing-machine"
-  ]
-}
-```
-
-And voila! You're good to go!
+- [babel-plugin-sowing-machine](https://github.com/harrysolovay/sowing-machine/tree/master/packages/babel-plugin): compiles sowing machine code into a valid format that can be understood at runtime
+- [sowing-machine](https://github.com/harrysolovay/sowing-machine/tree/master/packages/runtime): the runtime library which interprets compiled `sow` calls
+- [eslint-config-sowing-machine](https://github.com/harrysolovay/sowing-machine/tree/master/packages/eslint-config): a wrapper around the ESLint plugin which disables `no-undef` and replaces it with an equivalent plugin that marks html tag identifiers as defined within sow calls
+- [sowing-machine.macro](https://github.com/harrysolovay/sowing-machine/tree/master/packages/babel-macro): a version which makes use of the [babel-plugin-macros](https://github.com/kentcdodds/babel-plugin-macros) API to provide a more seamless integration into tools like [create-react-app](https://github.com/facebook/create-react-app), [NextJS](https://nextjs.org/) and [GatsbyJS](https://www.gatsbyjs.org/).
 
 ## Background
 
@@ -149,3 +142,185 @@ const App = sow(() =>(
 ```
 
 This is a smaller, more readable block of code, which lets you recognize grammar with greater speed than that of JSX.
+
+## Installation & setup
+
+#### Install `babel-plugin-sowing-machine and eslint-config-sowing-machine` as dev dependencies:
+
+```sh
+yarn add -D babel-plugin-sowing-machine eslint-config-sowing-machine
+```
+
+> Sowing Machine is also available in Babel Macro form (`sowing-machine.macro`)
+
+#### Install the runtime library as a dependency
+
+```sh
+yarn add sowing-machine
+```
+
+#### Add the plugin to your Babel config
+
+`.babelrc`
+
+```diff
+{
+  "presets": ["react-app"],
+    "plugins": [
++   "sowing-machine"
+  ]
+}
+```
+
+#### Add to your ESLint config as well
+
+`.eslintrc`
+
+```diff
+{
+  "extends": [
+    "react-app",
++   "sowing-machine"
+  ]
+}
+```
+
+And voila! You're good to go!
+
+## Describing UI
+
+Wrapping calls with `sow` ensures that they're translated into valid runtime code.
+
+```diff
+import sow from 'sowing-machine'
+
+// component
+const HelloWorld = sow(props =>
+  span(props)`Hello World!`
+)
+
+- const instance = HelloWorld()
++ const instance = sow(HelloWorld())
+```
+
+To use a 3rd-party component with Sowing Machine, we need to tell the compiler that it is in fact a component (and not just a function):
+
+```js
+import sow from 'sowing-machine'
+import {DatePicker} from '~/components'
+
+// wrapping with `sow` marks the `DatePicker` as sowable
+const SDatePicker = sow(DatePicker)
+
+// use SDatePicker
+const datePickerInstance = sow(SDatePicker())
+```
+
+### Elements
+
+#### Props
+
+```js
+div({some: 'prop'})
+```
+
+#### Children
+
+```js
+div(div({className: 'first-child'}), div({className: 'second-child'}))
+```
+
+#### Text Child
+
+```js
+h1`This is cool!`
+```
+
+#### Props and Children
+
+```js
+form({className: 'form'})(
+  input({type: 'email', name: 'email'}),
+  input({type: 'submit', value: 'Submit'}),
+)
+```
+
+#### Props & Text Child
+
+```js
+span({className: 'warning')`beware of dog`
+```
+
+## Life Cycle
+
+### Compilation
+
+During compilation, Sowing Machine code is broken down into a format that can be understood at runtime. There's no way––without the compilation step––to simultaneously support the following ways of describing your UI:
+
+```js
+// these cannot co-exist
+div(props)
+div(children)
+div(props)(children)
+div`child text`
+div(props)`child text`
+```
+
+Sowing Machine takes care of some additional complexity: differentiating between components, functions, and implicitly embedded logic.
+
+When working **with JSX, you need to mark your logic as off-limits to the compiler**:
+
+```jsx
+import React from 'react'
+
+const List = ({list}) => (
+  <div>
+    {list.map(e => (
+      <div>{e}</div>
+    ))}
+  </div>
+)
+```
+
+**With Sowing Machine, you don't need to do this explicitly**.
+
+```js
+import sow from 'sowing-machine'
+
+const List = sow(({list}) => div(list.map(e => div(e))))
+```
+
+The compiler extracts key information from each function or tag call within your `sow` calls, and places them in a lightweight, runtime-friendly wrapper.
+
+This code:
+
+```js
+sow(div({some: 'prop'})(span`neat`, span`syntax`))
+```
+
+Gets transformed into something like this:
+
+```js
+_c(
+  _s('div', [
+    [{some: 'prop'}],
+    [_s('span', _x, [['neat']]), _s('span', _x, [['syntax']])],
+  ]),
+)
+```
+
+### Runtime
+
+When executing the code above, the runtime library will analyze the arguments of each `_s`; is it a React component? If so does it have props, children, or both? Is it a tag function? Do the quasis need to be recombined or passed into the function according to [the TaggedTemplateLiteral specification](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals).
+
+## Roadmap
+
+|    Status     | Goal                                           | package               |
+| :-----------: | :--------------------------------------------- | --------------------- |
+| `in progress` | TypeScript definitions                         | runtime               |
+| `in progress` | Container memoization & invalidation           | runtime               |
+| `in progress` | Applying nested styles tagged onto `sow` calls | runtime               |
+| `in progress` | Better errors                                  | babel-plugin, runtime |
+|  `planning`   | More ESLint rules                              | eslint-plugin         |
+
+If you have feature ideas or want to contribute, please go ahead and file an issue.
