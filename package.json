@@ -1,6 +1,5 @@
 {
   "name": "sowing-machine",
-  "main": "index.js",
   "license": "MIT",
   "private": true,
   "repository": {

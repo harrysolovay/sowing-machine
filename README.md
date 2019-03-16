@@ -23,19 +23,20 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
-- [Minimal example](#minimal-example)
+- [Minimal Example](#minimal-example)
 - [Packages](#packages)
 - [Background](#background)
 - [Installation & Setup](#installation--setup)
 - [Describing UI](#describing-ui)
-- [createElement vs. cloneElement](#createelement-vs-cloneelement)
+- [`createElement` vs. `cloneElement`](#createelement-vs-cloneelement)
 - [Life Cycle](#life-cycle)
+- [Future Direction](#future-direction)
 - [Roadmap](#roadmap)
+- [Contributing](#contributing)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Minimal example
+## Minimal Example
 
 ```js
 import sow from 'sowing-machine'
@@ -64,7 +65,7 @@ const counterInstance = sow(Counter())
 
 ## Packages
 
-- [babel-plugin-sowing-machine](https://github.com/harrysolovay/sowing-machine/tree/master/packages/babel-plugin): compiles sowing machine code into a valid format that can be understood at runtime
+- [babel-plugin-sowing-machine](https://github.com/harrysolovay/sowing-machine/tree/master/packages/babel-plugin): compiles sowing machine code into a format that can be understood at runtime
 - [sowing-machine](https://github.com/harrysolovay/sowing-machine/tree/master/packages/runtime): the runtime library which interprets compiled `sow` calls
 - [eslint-config-sowing-machine](https://github.com/harrysolovay/sowing-machine/tree/master/packages/eslint-config): disables `no-undef` and enables a the `sowing-machine/no-undef` rule, which marks html tag identifiers as defined within sow calls
 - [sowing-machine.macro](https://github.com/harrysolovay/sowing-machine/tree/master/packages/babel-macro): makes use of the [babel-plugin-macros](https://github.com/kentcdodds/babel-plugin-macros) API to provide a more seamless integration with tools such as [create-react-app](https://github.com/facebook/create-react-app), [NextJS](https://nextjs.org/) and [GatsbyJS](https://www.gatsbyjs.org/).
@@ -75,14 +76,14 @@ How do we feel about the coupling of UI logic & markup in React? Well, JSX does 
 
 But what it really comes down to is this: **if you could have your pick of conventions, would you ever do the following?**
 
-```js
+```jsx
 // defining a function
 function add({a, b}) {
   return a + b
 }
 
 // calling the function
-;<add a={1} b={2} />
+const result = <add a={1} b={2} />
 ```
 
 Probably not. Yet, this is what we do for every single piece of our UI in React.
@@ -145,8 +146,6 @@ const App = sow(() =>
 )
 ```
 
-This is a smaller, more readable block of code, which lets you recognize grammar with greater speed than that of JSX.
-
 ## Installation & Setup
 
 #### Install the following dev dependencies:
@@ -162,6 +161,8 @@ yarn add -D babel-plugin-sowing-machine eslint-config-sowing-machine
 ```sh
 yarn add sowing-machine
 ```
+
+> there's no need to do this if you're using `sowing-machine.macro`
 
 #### Add the plugin to your Babel config
 
@@ -191,7 +192,7 @@ And voila! You're good to go!
 
 ## Describing UI
 
-Wrapping calls with `sow` ensures that they're translated into valid runtime code.
+Wrapping calls with `sow` ensures that they're transformed into valid runtime code.
 
 ```diff
 import sow from 'sowing-machine'
@@ -222,25 +223,33 @@ const datePickerInstance = sow(SDatePicker())
 
 ### Ways to write an element
 
-#### With props
+> note: in use, we need to wrap any of the following with `sow` (sow(div()))
+
+#### bare
+
+```js
+hr()
+```
+
+#### with props
 
 ```js
 div({some: 'prop'})
 ```
 
-#### With children
+#### with children
 
 ```js
 div(div({className: 'first-child'}), div({className: 'second-child'}))
 ```
 
-#### With text
+#### with text
 
 ```js
 h1`This is cool!`
 ```
 
-#### With props and children
+#### with props and children
 
 ```js
 form({className: 'form'})(
@@ -249,13 +258,13 @@ form({className: 'form'})(
 )
 ```
 
-#### With props & text
+#### with props & text
 
 ```js
 span({className: 'warning')`beware of dog`
 ```
 
-## createElement vs. cloneElement
+## `createElement` vs. `cloneElement`
 
 Let's say you have a component instance that you'd like to use as the basis for a new component. There's no way of expressing this with JSX. You'd need to do the following:
 
@@ -310,11 +319,12 @@ const List = ({list}) => (
 )
 ```
 
-**With Sowing Machine, this is much cleaner:**.
+**...this isn't the case with Sowing Machine:**.
 
 ```js
 import sow from 'sowing-machine'
 
+// no need to manually distinguish between logic & markup
 const List = sow(({list}) => div(list.map(e => div(e))))
 ```
 
@@ -341,7 +351,31 @@ _c(
 
 When executing the code above, the runtime library will analyze the arguments of each `_s`.
 
-The runtime goes through some of the following questions: is it a React component? If so does it have props, children, or both? Is it a tag function? Do the quasis need to be recombined or passed into the function according to [the TaggedTemplateLiteral specification](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals).
+The runtime goes through some of the following questions about each call: is the callee a React component? If so, are props applied? How about children? Both? Is the source a Tagged Template Expression? If we're dealing with a React component, we need to recombine the quasis. Otherwise, we need to pass quasis and expressions into the function according to [the Tagged Template Literal specification](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals). That way, libraries such as [`common-tags`](https://github.com/declandewet/common-tags) will still work.
+
+## Future Direction
+
+Compiling into a form that requires a runtime helper is heavily debatable (even though we do this pretty much everywhere, such as with ES6 classes). Without the runtime, it's impossible to support current `sowing-machine` syntax. However, there are other reasons that justify the (very slight) overhead. They mainly have to do with future direction for this toolchain:
+
+- allowing a 3rd-party to orchestrate component instanciation and function calls opens the door to some powerful optimizations. React users frequently fall into unintentional re-renders and re-calculations. A key goal for the runtime is to safeguard against these pitfalls.
+- styling! If you've ever used a CSS-in-JS library, chances are that you create a container component, assign it nested styles, and wrap your component root. Another key goal for the runtime is to support this pattern:
+
+```js
+import sow from 'sowing-machine'
+
+const BlueBoxWithHello = sow(() => div`Hello`)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100px;
+  height: 100px;
+  background-color: blue;
+  color: #fff;
+`
+```
+
+This API will be fairly minimal. It will include nested-css support and vendor-prefixing at runtime. That about covers it.
 
 ## Roadmap
 
@@ -353,4 +387,6 @@ The runtime goes through some of the following questions: is it a React componen
 | `in progress` | Better errors                                  | babel-plugin, runtime |
 |  `planning`   | More ESLint rules                              | eslint-plugin         |
 
-If you have feature ideas or want to contribute, please go ahead and file an issue.
+## Contributing
+
+If you have a feature idea or want to contribute, please go ahead and file an issue 💡
