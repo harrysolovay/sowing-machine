@@ -28,7 +28,7 @@
 - [Background](#background)
 - [Installation & Setup](#installation--setup)
 - [Describing UI](#describing-ui)
-- [`createElement` vs. `cloneElement`](#createelement-vs-cloneelement)
+- [Creating vs. Cloning](#creating-vs-cloning)
 - [Life Cycle](#life-cycle)
 - [Future Direction](#future-direction)
 - [Roadmap](#roadmap)
@@ -264,7 +264,7 @@ form({className: 'form'})(
 span({className: 'warning')`beware of dog`
 ```
 
-## `createElement` vs. `cloneElement`
+## Creating vs. Cloning
 
 Let's say you have a component instance that you'd like to use as the basis for a new component. There's no way of expressing this with JSX. You'd need to do the following:
 
