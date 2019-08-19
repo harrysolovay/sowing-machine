@@ -68,7 +68,7 @@ const counterInstance = sow(Counter())
 - [babel-plugin-sowing-machine](https://github.com/harrysolovay/sowing-machine/tree/master/packages/babel-plugin): compiles sowing machine code into a format that can be understood at runtime
 - [sowing-machine](https://github.com/harrysolovay/sowing-machine/tree/master/packages/runtime): the runtime library which interprets compiled `sow` calls
 - [eslint-config-sowing-machine](https://github.com/harrysolovay/sowing-machine/tree/master/packages/eslint-config): disables `no-undef` and enables a the `sowing-machine/no-undef` rule, which marks html tag identifiers as defined within sow calls
-- [sowing-machine.macro](https://github.com/harrysolovay/sowing-machine/tree/master/packages/babel-macro): makes use of the [babel-plugin-macros](https://github.com/kentcdodds/babel-plugin-macros) API to provide a more seamless integration with tools such as [create-react-app](https://github.com/facebook/create-react-app), [NextJS](https://nextjs.org/) and [GatsbyJS](https://www.gatsbyjs.org/).
+- [sowing-machine.macro](https://github.com/harrysolovay/sowing-machine/tree/master/packages/babel-macro): makes use of the [babel-plugin-macros](https://github.com/kentcdodds/babel-plugin-macros) API to provide a more seamless integration with tools such as [create-react-app](https://github.com/facebook/create-react-app), [NextJS](https://nextjs.org/) and [GatsbyJS](https://www.gatsbyjs.org/)
 
 ## Background
 
